@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import spacy
 from tqdm import tqdm
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 tqdm.pandas()
 
 #========== Cargar el CSV original o el preprocesado ==========#
@@ -54,7 +56,7 @@ if 'processed_text' not in df.columns:
     # Guardar el resultado procesado
     df.to_csv('Tweets_processed.csv', index=False, encoding='latin-1')
     print(f"\nPreprocesamiento completado y guardado en 'Tweets_processed.csv' ({len(df)} tweets procesados).")
-    print(f"⏱️ Tiempo total: {total_time:.2f} segundos\n")
+    print(f"Tiempo total: {total_time:.2f} segundos\n")
 
 else:
     print("\nLos datos ya están preprocesados. Saltando limpieza...")
@@ -62,3 +64,15 @@ else:
 #========== Mostrar vista previa final ==========#
 print("\n=== VISTA PREVIA DEL RESULTADO FINAL ===")
 print(df[['text', 'processed_text']])
+
+
+
+
+#=====Mostrar nube de palabras del texto procesado=====#
+all_words = ' '.join(df['processed_text'].dropna().tolist())
+wordcloud = WordCloud(width=800, height=400, background_color='white').generate(all_words)
+plt.figure(figsize=(10, 5))
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.title('Nube de Palabras de Tweets Procesados')
+plt.show()
